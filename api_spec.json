@@ -1,0 +1,640 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+      "title":"Sports Field Booking API",
+      "version":"1.0"
+    },
+    "servers": [
+      {"url":"http://localhost:8080/api"}
+    ],
+    "paths": {
+      "/register" :{
+        "post" : {
+          "tags": ["Register"],
+          "summary": "Register Endpoint",
+          "requestBody":{
+            "content": {
+              "application/json" : {
+                "schema":{
+                  "type": "object",
+                  "properties": {
+                    "name" : {
+                      "type": "string"
+                    },
+                    "address" : {
+                      "type": "string"
+                    },
+                    "phoneNumber" : {
+                      "type": "string"
+                    },
+                    "email" : {
+                      "type": "string"
+                    },
+                    "username":{
+                      "type": "string"
+                    },
+                    "password":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200" : {
+              "description": "success register",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/login" : {
+          "post" : {
+            "tags": ["Login"],
+            "summary": "Login Endpoint",
+            "requestBody":{
+              "content": {
+                "application/json" : {
+                  "schema":{
+                    "type": "object",
+                    "properties": {
+                      "username":{
+                        "type": "string"
+                      },
+                      "password":{
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200" : {
+                "description": "success login",
+                "content": {
+                  "application/json" : {
+                    "schema" : {
+                      "type": "object",
+                      "properties": {
+                        "code" : {
+                          "type": "number"
+                        },
+                        "status" : {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+      },
+      "/user/{username}" : {
+        "get" : {
+          "tags": ["User"],
+          "summary": "Get detail user by username",
+          "parameters": [
+            {
+              "required": true,
+              "schema":{"type": "string"},
+              "name": "username",
+              "in": "path",
+              "description": "username"
+            }
+          ],
+          "responses": {
+            "200" : {
+              "description": "success login",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data":{
+                        "type": "object",
+                        "properties": {
+                          "name" : {
+                            "type": "string"
+                          },
+                          "email" : {
+                            "type": "string"
+                          },
+                          "phoneNumber" : {
+                            "type": "string"
+                          },
+                          "alamat" : {
+                            "type": "string"
+                          },
+                          "image" : {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{id}" : {
+        "put" : {
+          "tags": ["User"],
+          "summary": "Update detail user",
+          "parameters": [
+            {
+              "schema":{
+                "type": "string"
+              },
+              "required": true,
+              "name": "id",
+              "in": "path",
+              "description": "user id"
+            }
+          ],
+          "requestBody":{
+            "content": {
+              "application/json" : {
+                "schema":{
+                  "type": "object",
+                  "properties": {
+                    "name" : {
+                      "type": "string"
+                    },
+                    "address" : {
+                      "type": "string"
+                    },
+                    "phoneNumber" : {
+                      "type": "string"
+                    },
+                    "email" : {
+                      "type": "string"
+                    },
+                    "image" : {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200" : {
+              "description": "success login",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data":{
+                        "type": "object",
+                        "properties": {
+                          "name" : {
+                            "type": "string"
+                          },
+                          "email" : {
+                            "type": "string"
+                          },
+                          "phoneNumber" : {
+                            "type": "string"
+                          },
+                          "alamat" : {
+                            "type": "string"
+                          },
+                          "image" : {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/reserve?venue={venue}&date{date}" : {
+        "get" : {
+          "tags": ["Reservation"],
+          "summary": "Get reservation data by date and venue id",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "venue",
+              "schema" : {
+                "type": "string"
+              },
+              "description": "Venue id."
+            },
+            {
+              "in": "query",
+              "name": "date",
+              "schema" : {
+                "type": "integer"
+              },
+              "description": "Date in milliseconds since epoch.\n\n Date : 2022:06:12 00:00:00\n\n Milliseconds since epoch : 1654966800000"
+            }
+          ],
+          "responses": {
+            "200" : {
+              "description": "success get reservation data",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data":{
+                        "type": "array",
+                        "items" : {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/reserve/{id}" : {
+        "get" : {
+          "tags": ["Reservation"],
+          "summary": "Get reservation data by user id",
+          "parameters": [
+            {
+              "required": true,
+              "in": "path",
+              "name": "id",
+              "schema" : {
+                "type": "string"
+              },
+              "description": "User id."
+            }
+          ],
+          "responses": {
+            "200" : {
+              "description": "success get reservation data",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items" : {
+                          "type": "object",
+                          "properties": {
+                            "transactionId" : {
+                              "type": "string"
+                            },
+                            "venueId" : {
+                              "type": "string"
+                            },
+                            "beginTime" : {
+                              "type": "integer"
+                            },
+                            "endTime" : {
+                              "type": "integer"
+                            },
+                            "hours" : {
+                              "type": "array",
+                              "items" : {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete" : {
+          "tags": ["Reservation"],
+          "summary": "Delete reservation data",
+          "parameters": [
+            {
+              "required": true,
+              "schema":{"type": "string"},
+              "name": "id",
+              "in": "path",
+              "description": "username"
+            }
+          ],
+          "responses": {
+            "200" : {
+              "description": "success delete reservation data",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/reserve" : {
+        "post" : {
+          "tags": ["Reservation"],
+          "summary": "Create reservation data",
+          "requestBody":{
+            "content": {
+              "application/json" : {
+                "schema":{
+                  "type": "object",
+                  "properties": {
+                    "venueId" : {
+                      "type": "string"
+                    },
+                    "UserId" : {
+                      "type": "string"
+                    },
+                    "beginTime" : {
+                      "type": "integer"
+                    },
+                    "endTime" : {
+                      "type": "integer"
+                    },
+                    "hours":{
+                      "type": "array",
+                      "items" : {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200" : {
+              "description": "success create reservation data",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data":{
+                        "type": "object",
+                        "properties": {
+                          "venueId" : {
+                            "type": "string"
+                          },
+                          "userId" : {
+                            "type": "string"
+                          },
+                          "beginTime" : {
+                            "type": "integer"
+                          },
+                          "endTime" : {
+                            "type": "integer"
+                          },
+                          "hours" : {
+                            "type": "array",
+                            "items" : {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put" : {
+          "tags": ["Reservation"],
+          "summary": "Update reservation data",
+          "requestBody":{
+            "content": {
+              "application/json" : {
+                "schema":{
+                  "type": "object",
+                  "properties": {
+                    "idTransaction" : {
+                      "type": "string"
+                    },
+                    "beginTime" : {
+                      "type": "integer"
+                    },
+                    "endTime" : {
+                      "type": "integer"
+                    },
+                    "hours":{
+                      "type": "array",
+                      "items" : {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200" : {
+              "description": "success update reservation data",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data":{
+                        "type": "object",
+                        "properties": {
+                          "venueId" : {
+                            "type": "string"
+                          },
+                          "userId" : {
+                            "type": "string"
+                          },
+                          "beginTime" : {
+                            "type": "integer"
+                          },
+                          "endTime" : {
+                            "type": "integer"
+                          },
+                          "hours" : {
+                            "type": "array",
+                            "items" : {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/venue" :{
+        "get" : {
+          "tags": ["Venue"],
+          "summary": "Get all venue data",
+          "responses": {
+            "200" : {
+              "description": "success get venue",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data" : {
+                        "type": "array",
+                        "items" : {
+                          "type": "object",
+                          "properties": {
+                            "venueId" : {
+                              "type": "string"
+                            },
+                            "title" : {
+                              "type": "string"
+                            },
+                            "location" : {
+                              "type": "string"
+                            },
+                            "price" : {
+                              "type": "integer"
+                            },
+                            "image" : {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/venue/{id}" :{
+        "get" : {
+          "tags": ["Venue"],
+          "summary": "Get venue info by id",
+          "responses": {
+            "200" : {
+              "description": "success get venue",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data" : {
+                        "type": "object",
+                        "properties": {
+                            "venueId" : {
+                              "type": "string"
+                            },
+                            "title" : {
+                              "type": "string"
+                            },
+                            "location" : {
+                              "type": "string"
+                            },
+                            "price" : {
+                              "type": "integer"
+                            },
+                            "image" : {
+                              "type": "string"
+                            }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+}
