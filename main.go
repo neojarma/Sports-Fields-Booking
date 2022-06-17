@@ -3,6 +3,7 @@ package main
 import (
 	"booking_fields/connection"
 	"booking_fields/routes"
+	"os"
 
 	"github.com/labstack/echo"
 )
@@ -18,5 +19,6 @@ func main() {
 	group := e.Group("/api")
 	routes.Routes(group, db)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	port := ":" + os.Getenv("PORT")
+	e.Logger.Fatal(e.Start(port))
 }
