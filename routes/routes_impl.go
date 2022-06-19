@@ -29,6 +29,11 @@ func Routes(group *echo.Group, db *sql.DB) {
 	venueRoutes(group, db)
 	registerRoutes(group, db)
 	loginRoutes(group, db)
+	swaggerRoute(group)
+}
+
+func swaggerRoute(group *echo.Group) {
+	group.Static("/swagger", "dist")
 }
 
 func reservationRoutes(group *echo.Group, db *sql.DB) {
