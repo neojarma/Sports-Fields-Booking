@@ -161,27 +161,19 @@
           }
         }
       },
-      "/user/{id}" : {
+      "/user" : {
         "put" : {
           "tags": ["User"],
           "summary": "Update detail user",
-          "parameters": [
-            {
-              "schema":{
-                "type": "string"
-              },
-              "required": true,
-              "name": "id",
-              "in": "path",
-              "description": "user id"
-            }
-          ],
           "requestBody":{
             "content": {
               "application/json" : {
                 "schema":{
                   "type": "object",
                   "properties": {
+                    "idUser" :{
+                      "type": "string"
+                    },
                     "name" : {
                       "type": "string"
                     },
@@ -594,6 +586,17 @@
         "get" : {
           "tags": ["Venue"],
           "summary": "Get venue info by id",
+          "parameters": [
+            {
+              "required": true,
+              "in": "path",
+              "name": "id",
+              "schema" : {
+                "type": "string"
+              },
+              "description": "Venue id."
+            }
+          ],
           "responses": {
             "200" : {
               "description": "success get venue",

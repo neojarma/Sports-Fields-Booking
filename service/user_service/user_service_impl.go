@@ -34,7 +34,7 @@ func (service *UserServiceImpl) GetUserByUsername(ctx context.Context, username 
 		Address:      domainResult.Address,
 		PhoneNumber:  domainResult.PhoneNumber,
 		Email:        domainResult.Email,
-		ImageProfile: string(domainResult.ImageProfile),
+		ImageProfile: domainResult.ImageProfile,
 	}, nil
 }
 

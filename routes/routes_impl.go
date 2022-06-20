@@ -54,7 +54,7 @@ func UserRoutes(group *echo.Group, db *sql.DB) {
 	controller := usercontroller.NewUserController(service)
 
 	group.GET("/user/:username", controller.GetUserByUsername)
-	group.PUT("/user/:id", controller.UpdateUser)
+	group.PUT("/user", controller.UpdateUser)
 
 }
 

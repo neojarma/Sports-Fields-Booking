@@ -4,6 +4,7 @@ import (
 	"booking_fields/model/domain"
 	"context"
 	"database/sql"
+	"errors"
 )
 
 type UserRepositoryImpl struct {
@@ -32,6 +33,8 @@ func (repository *UserRepositoryImpl) GetUserByUsername(ctx context.Context, db 
 		if err != nil {
 			return response, err
 		}
+	} else {
+		return response, errors.New("user not found")
 	}
 
 	return response, nil

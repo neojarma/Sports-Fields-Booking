@@ -33,10 +33,9 @@ func (controller *UserControllerImpl) GetUserByUsername(ctx echo.Context) error 
 	result, err := controller.UserService.GetUserByUsername(ctxBack, username)
 
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, &Response{
+		return ctx.JSON(http.StatusNotFound, &Response{
 			Code:   http.StatusNotFound,
 			Status: err.Error(),
-			Data:   &result,
 		})
 	}
 
@@ -49,12 +48,9 @@ func (controller *UserControllerImpl) GetUserByUsername(ctx echo.Context) error 
 
 func (controller *UserControllerImpl) UpdateUser(ctx echo.Context) error {
 	ctxBack := context.Background()
-	idUser := ctx.Param("username")
 
 	req := new(request.UserRequest)
 	ctx.Bind(req)
-
-	req.IdUser = idUser
 
 	result, err := controller.UserService.UpdateUser(ctxBack, req)
 	if err != nil {
