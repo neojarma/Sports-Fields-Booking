@@ -8,6 +8,7 @@ import (
 	reservationrepository "booking_fields/repository/reservation_repository"
 	"context"
 	"database/sql"
+	"fmt"
 	"strconv"
 )
 
@@ -31,8 +32,11 @@ func (service *ReservationServiceImpl) GetReservationSchedule(ctx context.Contex
 	// front-end request just date, like YYYY_MM DD 00.00.00
 	// add +8 hour
 	MinDate := request.Date + START_HOUR_IN_MILLIS
-	// end hour is 7 PM so we add +11 hour
-	MaxDate := request.Date + END_HOUR_IN_MILLIS
+	// end hour is 7 PM so we add +11 hour from star hour
+	MaxDate := request.Date + START_HOUR_IN_MILLIS + END_HOUR_IN_MILLIS
+
+	fmt.Println(MinDate)
+	fmt.Println(MaxDate)
 
 	req := domain.Reservation{
 		VenueId:   request.VenueId,
