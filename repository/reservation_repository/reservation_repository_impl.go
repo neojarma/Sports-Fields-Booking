@@ -63,7 +63,7 @@ func parseHour(byteJson []byte) ([]int, error) {
 
 func (repository *ReservationRepositoryImpl) GetUserReservationById(ctx context.Context, db *sql.DB, userId string) ([]domain.Reservation, error) {
 
-	SQL := "SELECT id_transaction, id_venue, begin_time, end_time, status, array_to_json(hours::int[]) from public.reservation WHERE id_user = ($1)"
+	SQL := "SELECT id_transaction, id_venue, begin_time, end_time, status, array_to_json(hours::int[]), booking_time from public.reservation WHERE id_user = ($1)"
 
 	rows, err := db.QueryContext(ctx, SQL, userId)
 
@@ -79,7 +79,7 @@ func (repository *ReservationRepositoryImpl) GetUserReservationById(ctx context.
 		var byteJson []byte
 		var response domain.Reservation
 
-		err := rows.Scan(&response.IdTransaction, &response.VenueId, &response.BeginTime, &response.EndTime, &response.Status, &byteJson)
+		err := rows.Scan(&response.IdTransaction, &response.VenueId, &response.BeginTime, &response.EndTime, &response.Status, &byteJson, &response.BookingTime)
 		if err != nil {
 			return nil, err
 		}
@@ -97,9 +97,9 @@ func (repository *ReservationRepositoryImpl) GetUserReservationById(ctx context.
 
 func (repository *ReservationRepositoryImpl) CreateReservation(ctx context.Context, db *sql.DB, reservation *domain.Reservation) (domain.Reservation, error) {
 
-	SQL := "INSERT INTO public.reservation(id_transaction, id_venue, id_user, begin_time, end_time, hours) VALUES ($1, $2, $3, $4, $5, $6)"
+	SQL := "INSERT INTO public.reservation(id_transaction, id_venue, id_user, begin_time, end_time, hours, booking_time) VALUES ($1, $2, $3, $4, $5, $6, $7)"
 
-	_, err := db.ExecContext(ctx, SQL, reservation.IdTransaction, reservation.VenueId, reservation.UserId, reservation.BeginTime, reservation.EndTime, pq.Array(reservation.Hours))
+	_, err := db.ExecContext(ctx, SQL, reservation.IdTransaction, reservation.VenueId, reservation.UserId, reservation.BeginTime, reservation.EndTime, pq.Array(reservation.Hours), reservation.BookingTime)
 
 	if err != nil {
 		return domain.Reservation{}, err
@@ -112,14 +112,15 @@ func (repository *ReservationRepositoryImpl) CreateReservation(ctx context.Conte
 		BeginTime:     reservation.BeginTime,
 		EndTime:       reservation.EndTime,
 		Hours:         reservation.Hours,
+		BookingTime:   reservation.BookingTime,
 	}, nil
 }
 
 func (repository *ReservationRepositoryImpl) UpdateReservation(ctx context.Context, db *sql.DB, reservation *domain.Reservation) (domain.Reservation, error) {
 
-	SQL := "UPDATE public.reservation SET begin_time = ($1), end_time = ($2), hours = ($3) WHERE id_transaction = ($4)"
+	SQL := "UPDATE public.reservation SET begin_time = ($1), end_time = ($2), hours = ($3), booking_time = ($4) WHERE id_transaction = ($5)"
 
-	_, err := db.ExecContext(ctx, SQL, reservation.BeginTime, reservation.EndTime, pq.Array(reservation.Hours), reservation.IdTransaction)
+	_, err := db.ExecContext(ctx, SQL, reservation.BeginTime, reservation.EndTime, pq.Array(reservation.Hours), reservation.BookingTime, reservation.IdTransaction)
 	if err != nil {
 		return domain.Reservation{}, err
 	}
@@ -130,6 +131,7 @@ func (repository *ReservationRepositoryImpl) UpdateReservation(ctx context.Conte
 		BeginTime:     reservation.BeginTime,
 		EndTime:       reservation.EndTime,
 		Hours:         reservation.Hours,
+		BookingTime:   reservation.BookingTime,
 	}, nil
 }
 
@@ -143,4 +145,37 @@ func (repository *ReservationRepositoryImpl) CancelReservation(ctx context.Conte
 	}
 
 	return nil
+}
+
+func (repository *ReservationRepositoryImpl) GetReservationScheduleForUpdate(ctx context.Context, db *sql.DB, reservation *domain.Reservation) ([]int, error) {
+	SQL := "SELECT array_to_json(hours::int[]) FROM public.reservation WHERE id_venue = ($1) AND status = 'valid' AND begin_time >= ($2) AND end_time <= ($3) AND id_transaction != ($4)"
+
+	rows, err := db.QueryContext(ctx, SQL, reservation.VenueId, reservation.BeginTime, reservation.EndTime, reservation.IdTransaction)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	allHours := []int{}
+
+	for rows.Next() {
+		// array_to_json() return []byte
+		var byteJson []byte
+		err := rows.Scan(&byteJson)
+		if err != nil {
+			return nil, err
+		}
+
+		hour, err := parseHour(byteJson)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, v := range hour {
+			allHours = append(allHours, v)
+		}
+	}
+
+	return allHours, nil
 }

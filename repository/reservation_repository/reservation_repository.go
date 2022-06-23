@@ -12,4 +12,5 @@ type ReservationRepository interface {
 	CreateReservation(ctx context.Context, db *sql.DB, reservation *domain.Reservation) (domain.Reservation, error)
 	UpdateReservation(ctx context.Context, db *sql.DB, reservation *domain.Reservation) (domain.Reservation, error)
 	CancelReservation(ctx context.Context, db *sql.DB, reservationId string) error
+	GetReservationScheduleForUpdate(ctx context.Context, db *sql.DB, reservation *domain.Reservation) ([]int, error)
 }

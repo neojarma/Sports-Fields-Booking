@@ -9,4 +9,5 @@ type Reservation struct {
 	EndTime       int64
 	Status        string
 	Hours         []int
+	BookingTime   int64
 }

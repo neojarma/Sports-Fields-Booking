@@ -12,4 +12,5 @@ type ReservationService interface {
 	CreateReservation(ctx context.Context, request *request.ReservationRequest) (response.ReservationResponse, error)
 	UpdateReservation(ctx context.Context, request *request.ReservationRequest) (response.ReservationResponse, error)
 	CancelReservation(ctx context.Context, reservationId string) error
+	GetReservationScheduleForUpdate(ctx context.Context, request *request.ReservationRequest) ([]int, error)
 }

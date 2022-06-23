@@ -8,4 +8,5 @@ type ReservationRequest struct {
 	BeginTime     int64  `json:"beginTime,omitempty"`
 	EndTime       int64  `json:"endTime,omitempty"`
 	Hours         []int  `json:"hours,omitempty"`
+	BookingTime   int64  `json:"bookingTime,omitempty"`
 }

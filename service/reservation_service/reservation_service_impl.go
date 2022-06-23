@@ -8,7 +8,6 @@ import (
 	reservationrepository "booking_fields/repository/reservation_repository"
 	"context"
 	"database/sql"
-	"fmt"
 	"strconv"
 )
 
@@ -34,9 +33,6 @@ func (service *ReservationServiceImpl) GetReservationSchedule(ctx context.Contex
 	MinDate := request.Date + START_HOUR_IN_MILLIS
 	// end hour is 7 PM so we add +11 hour from star hour
 	MaxDate := request.Date + START_HOUR_IN_MILLIS + END_HOUR_IN_MILLIS
-
-	fmt.Println(MinDate)
-	fmt.Println(MaxDate)
 
 	req := domain.Reservation{
 		VenueId:   request.VenueId,
@@ -70,6 +66,7 @@ func (service *ReservationServiceImpl) GetUserReservationById(ctx context.Contex
 			EndTime:       v.EndTime,
 			Status:        v.Status,
 			Hours:         v.Hours,
+			BookingTime:   v.BookingTime,
 		}
 
 		result = append(result, item)
@@ -91,6 +88,7 @@ func (service *ReservationServiceImpl) CreateReservation(ctx context.Context, re
 		BeginTime:     request.BeginTime,
 		Hours:         request.Hours,
 		EndTime:       request.EndTime,
+		BookingTime:   request.BookingTime,
 	}
 
 	domainResult, err := service.ReservationRepository.CreateReservation(ctx, service.Db, &reservation)
@@ -104,6 +102,7 @@ func (service *ReservationServiceImpl) CreateReservation(ctx context.Context, re
 		BeginTime:     domainResult.BeginTime,
 		EndTime:       domainResult.EndTime,
 		Hours:         domainResult.Hours,
+		BookingTime:   domainResult.BookingTime,
 	}, nil
 }
 
@@ -114,6 +113,7 @@ func (service *ReservationServiceImpl) UpdateReservation(ctx context.Context, re
 		BeginTime:     request.BeginTime,
 		Hours:         request.Hours,
 		EndTime:       request.EndTime,
+		BookingTime:   request.BookingTime,
 	}
 
 	domainResult, err := service.ReservationRepository.UpdateReservation(ctx, service.Db, &reservation)
@@ -126,6 +126,7 @@ func (service *ReservationServiceImpl) UpdateReservation(ctx context.Context, re
 		BeginTime:     domainResult.BeginTime,
 		EndTime:       domainResult.EndTime,
 		Hours:         domainResult.Hours,
+		BookingTime:   domainResult.BookingTime,
 	}, nil
 }
 
@@ -138,4 +139,26 @@ func (service *ReservationServiceImpl) CancelReservation(ctx context.Context, re
 	}
 
 	return nil
+}
+
+func (service *ReservationServiceImpl) GetReservationScheduleForUpdate(ctx context.Context, request *request.ReservationRequest) ([]int, error) {
+	// front-end request just date, like YYYY_MM DD 00.00.00
+	// add +8 hour
+	MinDate := request.Date + START_HOUR_IN_MILLIS
+	// end hour is 7 PM so we add +11 hour from star hour
+	MaxDate := request.Date + START_HOUR_IN_MILLIS + END_HOUR_IN_MILLIS
+
+	req := domain.Reservation{
+		VenueId:       request.VenueId,
+		BeginTime:     MinDate,
+		EndTime:       MaxDate,
+		IdTransaction: request.IdTransaction,
+	}
+
+	result, err := service.ReservationRepository.GetReservationSchedule(ctx, service.Db, &req)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }

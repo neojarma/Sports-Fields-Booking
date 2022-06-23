@@ -166,3 +166,45 @@ func (controller *ReservationControllerImpl) CancelReservation(ctx echo.Context)
 		Status: "success delete reservation",
 	})
 }
+
+func (controller *ReservationControllerImpl) GetReservationScheduleForUpdate(ctx echo.Context) error {
+	type Response struct {
+		Code   int    `json:"code"`
+		Status string `json:"status"`
+		Data   *[]int `json:"data,omitempty"`
+	}
+	ctxBack := context.Background()
+
+	venueId := ctx.QueryParam("venue")
+	dateParam := ctx.QueryParam("date")
+	idTransaction := ctx.QueryParam("txId")
+	date, err := strconv.Atoi(dateParam)
+
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, &Response{
+			Code:   http.StatusBadRequest,
+			Status: err.Error(),
+		})
+	}
+
+	req := &request.ReservationRequest{
+		VenueId:       venueId,
+		Date:          int64(date),
+		IdTransaction: idTransaction,
+	}
+
+	result, err := controller.ReservationService.GetReservationSchedule(ctxBack, req)
+
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, &Response{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+		})
+	}
+
+	return ctx.JSON(http.StatusOK, &Response{
+		Code:   http.StatusOK,
+		Status: "succes get data schedule",
+		Data:   &result,
+	})
+}

@@ -42,6 +42,7 @@ func reservationRoutes(group *echo.Group, db *sql.DB) {
 	controller := reservationcontroller.NewReservationController(service)
 
 	group.GET("/reserve", controller.GetReservationSchedule)
+	group.GET("/reserve/schedule", controller.GetReservationScheduleForUpdate)
 	group.GET("/reserve/:id", controller.GetUserReservationById)
 	group.POST("/reserve", controller.CreateReservation)
 	group.PUT("/reserve", controller.UpdateReservation)

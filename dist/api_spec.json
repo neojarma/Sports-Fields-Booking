@@ -286,6 +286,64 @@
           }
         }
       },
+      "/reserve/schedule" : {
+        "get" : {
+          "tags": ["Reservation"],
+          "summary": "Get reservation data by date and venue id but exclude the transaction id params",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "venue",
+              "schema" : {
+                "type": "string"
+              },
+              "description": "Venue id."
+            },
+            {
+              "in": "query",
+              "name": "date",
+              "schema" : {
+                "type": "integer"
+              },
+              "description": "Date in milliseconds since epoch.\n\n Date : 2022:06:12 00:00:00\n\n Milliseconds since epoch : 1654966800000"
+            },
+            {
+              "in": "query",
+              "name": "txId",
+              "schema" : {
+                "type": "string"
+              },
+              "description": "Transaction id."
+            }
+          ],
+          "responses": {
+            "200" : {
+              "description": "success get reservation data",
+              "content": {
+                "application/json" : {
+                  "schema" : {
+                    "type": "object",
+                    "properties": {
+                      "code" : {
+                        "type": "number"
+                      },
+                      "status" : {
+                        "type": "string"
+                      },
+                      "data":{
+                        "type": "array",
+                        "items" : {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/reserve/{id}" : {
         "get" : {
           "tags": ["Reservation"],
@@ -330,6 +388,9 @@
                               "type": "integer"
                             },
                             "endTime" : {
+                              "type": "integer"
+                            },
+                            "bookingTime" : {
                               "type": "integer"
                             },
                             "hours" : {
@@ -404,6 +465,9 @@
                     "endTime" : {
                       "type": "integer"
                     },
+                    "bookingTime" : {
+                      "type": "integer"
+                    },
                     "hours":{
                       "type": "array",
                       "items" : {
@@ -444,6 +508,9 @@
                           "endTime" : {
                             "type": "integer"
                           },
+                          "bookingTime" : {
+                            "type": "integer"
+                          },
                           "hours" : {
                             "type": "array",
                             "items" : {
@@ -475,6 +542,9 @@
                       "type": "integer"
                     },
                     "endTime" : {
+                      "type": "integer"
+                    },
+                    "bookingTime" : {
                       "type": "integer"
                     },
                     "hours":{
@@ -515,6 +585,9 @@
                             "type": "integer"
                           },
                           "endTime" : {
+                            "type": "integer"
+                          },
+                          "bookingTime" : {
                             "type": "integer"
                           },
                           "hours" : {
