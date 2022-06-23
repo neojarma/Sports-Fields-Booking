@@ -67,6 +67,7 @@ func (service *ReservationServiceImpl) GetUserReservationById(ctx context.Contex
 			Status:        v.Status,
 			Hours:         v.Hours,
 			BookingTime:   v.BookingTime,
+			TotalPrice:    v.TotalPrice,
 		}
 
 		result = append(result, item)
@@ -89,6 +90,7 @@ func (service *ReservationServiceImpl) CreateReservation(ctx context.Context, re
 		Hours:         request.Hours,
 		EndTime:       request.EndTime,
 		BookingTime:   request.BookingTime,
+		TotalPrice:    request.TotalPrice,
 	}
 
 	domainResult, err := service.ReservationRepository.CreateReservation(ctx, service.Db, &reservation)
@@ -103,6 +105,7 @@ func (service *ReservationServiceImpl) CreateReservation(ctx context.Context, re
 		EndTime:       domainResult.EndTime,
 		Hours:         domainResult.Hours,
 		BookingTime:   domainResult.BookingTime,
+		TotalPrice:    domainResult.TotalPrice,
 	}, nil
 }
 
@@ -114,6 +117,7 @@ func (service *ReservationServiceImpl) UpdateReservation(ctx context.Context, re
 		Hours:         request.Hours,
 		EndTime:       request.EndTime,
 		BookingTime:   request.BookingTime,
+		TotalPrice:    request.TotalPrice,
 	}
 
 	domainResult, err := service.ReservationRepository.UpdateReservation(ctx, service.Db, &reservation)
@@ -127,6 +131,7 @@ func (service *ReservationServiceImpl) UpdateReservation(ctx context.Context, re
 		EndTime:       domainResult.EndTime,
 		Hours:         domainResult.Hours,
 		BookingTime:   domainResult.BookingTime,
+		TotalPrice:    domainResult.TotalPrice,
 	}, nil
 }
 
