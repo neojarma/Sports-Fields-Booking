@@ -393,6 +393,9 @@
                             "bookingTime" : {
                               "type": "integer"
                             },
+                            "totalPrice" : {
+                              "type": "integer"
+                            },
                             "hours" : {
                               "type": "array",
                               "items" : {
@@ -468,6 +471,9 @@
                     "bookingTime" : {
                       "type": "integer"
                     },
+                    "totalPrice" : {
+                      "type": "integer"
+                    },
                     "hours":{
                       "type": "array",
                       "items" : {
@@ -511,6 +517,9 @@
                           "bookingTime" : {
                             "type": "integer"
                           },
+                          "totalPrice" : {
+                            "type": "integer"
+                          },
                           "hours" : {
                             "type": "array",
                             "items" : {
@@ -545,6 +554,9 @@
                       "type": "integer"
                     },
                     "bookingTime" : {
+                      "type": "integer"
+                    },
+                    "totalPrice" : {
                       "type": "integer"
                     },
                     "hours":{
@@ -588,6 +600,9 @@
                             "type": "integer"
                           },
                           "bookingTime" : {
+                            "type": "integer"
+                          },
+                          "totalPrice" : {
                             "type": "integer"
                           },
                           "hours" : {

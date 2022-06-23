@@ -63,7 +63,7 @@ func parseHour(byteJson []byte) ([]int, error) {
 
 func (repository *ReservationRepositoryImpl) GetUserReservationById(ctx context.Context, db *sql.DB, userId string) ([]domain.Reservation, error) {
 
-	SQL := "SELECT id_transaction, id_venue, begin_time, end_time, status, array_to_json(hours::int[]), booking_time, total_price, from public.reservation WHERE id_user = ($1)"
+	SQL := "SELECT id_transaction, id_venue, begin_time, end_time, status, array_to_json(hours::int[]), booking_time, total_price from public.reservation WHERE id_user = ($1)"
 
 	rows, err := db.QueryContext(ctx, SQL, userId)
 
