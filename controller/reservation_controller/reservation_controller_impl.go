@@ -193,7 +193,7 @@ func (controller *ReservationControllerImpl) GetReservationScheduleForUpdate(ctx
 		IdTransaction: idTransaction,
 	}
 
-	result, err := controller.ReservationService.GetReservationSchedule(ctxBack, req)
+	result, err := controller.ReservationService.GetReservationScheduleForUpdate(ctxBack, req)
 
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, &Response{

@@ -160,7 +160,7 @@ func (service *ReservationServiceImpl) GetReservationScheduleForUpdate(ctx conte
 		IdTransaction: request.IdTransaction,
 	}
 
-	result, err := service.ReservationRepository.GetReservationSchedule(ctx, service.Db, &req)
+	result, err := service.ReservationRepository.GetReservationScheduleForUpdate(ctx, service.Db, &req)
 	if err != nil {
 		return nil, err
 	}
